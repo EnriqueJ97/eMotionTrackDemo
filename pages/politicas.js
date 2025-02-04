@@ -2,6 +2,7 @@
 import { useState } from 'react';
 
 export default function PoliticasPage() {
+  const [politicaSeleccionada, setPoliticaSeleccionada] = useState('teletrabajo');
   const [politicas, setPoliticas] = useState({
     teletrabajo: 50,
     horarioFlexible: true,
@@ -23,7 +24,6 @@ export default function PoliticasPage() {
     let bienestar = 0;
     let impactoFinanciero = 0;
 
-    // Impactos de las políticas
     burnout -= politicas.teletrabajo * 0.05;
     engagement += politicas.teletrabajo * 0.1;
     
@@ -49,13 +49,11 @@ export default function PoliticasPage() {
     });
   };
 
-  return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Simulador de Políticas Laborales</h1>
-
-      <div className="bg-white rounded-lg shadow-lg p-6 space-y-6">
-        <div className="space-y-4">
-          <div>
+  const renderPoliticaSeleccionada = () => {
+    switch (politicaSeleccionada) {
+      case 'teletrabajo':
+        return (
+          <div className="mb-4">
             <label htmlFor="teletrabajo" className="block text-sm font-medium mb-2">Teletrabajo (%):</label>
             <input
               type="range"
@@ -68,8 +66,10 @@ export default function PoliticasPage() {
             />
             <span className="text-sm">{politicas.teletrabajo}%</span>
           </div>
-
-          <div>
+        );
+      case 'horarioFlexible':
+        return (
+          <div className="mb-4">
             <label className="flex items-center space-x-2">
               <input
                 type="checkbox"
@@ -80,8 +80,10 @@ export default function PoliticasPage() {
               <span>Horario Flexible</span>
             </label>
           </div>
-
-          <div>
+        );
+      case 'diasVacaciones':
+        return (
+          <div className="mb-4">
             <label htmlFor="diasVacaciones" className="block text-sm font-medium mb-2">Días de Vacaciones:</label>
             <input
               type="number"
@@ -93,8 +95,10 @@ export default function PoliticasPage() {
               max="30"
             />
           </div>
-
-          <div>
+        );
+      case 'programaBienestar':
+        return (
+          <div className="mb-4">
             <label className="flex items-center space-x-2">
               <input
                 type="checkbox"
@@ -105,8 +109,10 @@ export default function PoliticasPage() {
               <span>Programa de Bienestar</span>
             </label>
           </div>
-
-          <div>
+        );
+      case 'incentivos':
+        return (
+          <div className="mb-4">
             <label htmlFor="incentivos" className="block text-sm font-medium mb-2">Incentivos (% del salario):</label>
             <input
               type="number"
@@ -118,7 +124,34 @@ export default function PoliticasPage() {
               max="30"
             />
           </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="p-6 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6">Simulador de Políticas Laborales</h1>
+
+      <div className="bg-white rounded-lg shadow-lg p-6 space-y-6">
+        <div className="mb-6">
+          <label htmlFor="politica" className="block text-sm font-medium mb-2">Seleccionar Política:</label>
+          <select
+            id="politica"
+            value={politicaSeleccionada}
+            onChange={(e) => setPoliticaSeleccionada(e.target.value)}
+            className="w-full p-2 border rounded"
+          >
+            <option value="teletrabajo">Teletrabajo</option>
+            <option value="horarioFlexible">Horario Flexible</option>
+            <option value="diasVacaciones">Días de Vacaciones</option>
+            <option value="programaBienestar">Programa de Bienestar</option>
+            <option value="incentivos">Incentivos</option>
+          </select>
         </div>
+
+        {renderPoliticaSeleccionada()}
 
         <button 
           onClick={calcularImpacto}
