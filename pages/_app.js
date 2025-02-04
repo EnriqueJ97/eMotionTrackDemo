@@ -23,8 +23,7 @@ function MyApp({ Component, pageProps }) {
                 Portal RRHH
               </Link>
               {/* Añade los simuladores */}
-              <Link href="/cultura" className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">
-          
+              <Link href="/politicas" className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">
                 Simulador de Políticas
               </Link>
             </div>
