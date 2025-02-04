@@ -1,0 +1,17 @@
+.policy-card {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.policy-card.selected {
+  transform: scale(1.03);
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
+  border: 2px solid #007bff;
+}
+
+#results {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
