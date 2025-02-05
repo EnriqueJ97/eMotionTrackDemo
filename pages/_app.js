@@ -9,8 +9,8 @@ function MyApp({ Component, pageProps }) {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <Link href="/" className="text-xl font-bold text-blue-600">
-                eMotionTrack
+              <Link href="/" className="flex items-center">
+                <img src="/attached_assets/logo emotion.png" alt="eMotionTrack" className="h-8" />
               </Link>
             </div>
           </div>
