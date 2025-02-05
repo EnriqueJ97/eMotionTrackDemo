@@ -45,6 +45,13 @@ export default function PortalManagers() {
       icon: '📅',
       href: '/guardias-manager',
       color: 'indigo'
+    },
+    {
+      title: 'Gestión de Flexibilidad',
+      description: 'Gestiona las solicitudes de flexibilidad del equipo',
+      icon: '🎯',
+      href: '/flexibilidad-manager',
+      color: 'pink'
     }
   ];
 
