@@ -1,73 +1,114 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
+
+const Card = ({ children, className }) => (
+  <div className={`rounded-lg shadow-lg p-4 ${className}`}>{children}</div>
+);
+
+const Button = ({ children, onClick, disabled, className }) => (
+  <button
+    onClick={onClick}
+    disabled={disabled}
+    className={`px-4 py-2 rounded-lg font-medium text-white ${className}`}
+  >
+    {children}
+  </button>
+);
 
 export default function Home() {
+  const [registros, setRegistros] = useState([]);
+  const [checkedIn, setCheckedIn] = useState(false);
+  const [nivelEnergia, setNivelEnergia] = useState(5);
+  const [currentTime, setCurrentTime] = useState('');
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date();
+      setCurrentTime(now.toLocaleTimeString());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleCheckIn = () => {
+    const newRegistro = {
+      tipo: 'entrada',
+      timestamp: new Date().toLocaleTimeString(),
+      nivelEnergia,
+    };
+    setRegistros([newRegistro, ...registros]);
+    setCheckedIn(true);
+  };
+
+  const handleCheckOut = () => {
+    const newRegistro = {
+      tipo: 'salida',
+      timestamp: new Date().toLocaleTimeString(),
+      nivelEnergia,
+    };
+    setRegistros([newRegistro, ...registros]);
+    setCheckedIn(false);
+  };
+
   return (
-    <div className="max-w-7xl mx-auto px-4">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Bienvenido a eMotionTrack
-        </h1>
-        <p className="text-xl text-gray-600">
-          Plataforma integral de bienestar laboral y prevención del burnout
-        </p>
+    <div className="p-6 max-w-4xl mx-auto space-y-6">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold mb-2">Registro Horario Digital</h1>
+        <p className="text-gray-600">{currentTime}</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Portal Empleado */}
-        <a 
-          href="/empleado" 
-          className="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow"
-        >
-          <h2 className="text-2xl font-bold text-blue-600 mb-4">Portal Empleado</h2>
-          <ul className="space-y-2 text-gray-600">
-            <li>✓ Registro de entrada y salida</li>
-            <li>✓ Medición de nivel de energía</li>
-            <li>✓ Pulsos emocionales diarios</li>
-            <li>✓ Seguimiento de bienestar</li>
-          </ul>
-        </a>
-
-        {/* Portal RRHH */}
-        <a 
-          href="/rrhh" 
-          className="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow"
-        >
-          <h2 className="text-2xl font-bold text-green-600 mb-4">Portal RRHH</h2>
-          <ul className="space-y-2 text-gray-600">
-            <li>✓ Dashboard analítico</li>
-            <li>✓ Monitoreo de equipos</li>
-            <li>✓ Alertas de burnout</li>
-            <li>✓ Reportes y tendencias</li>
-          </ul>
-        </a>
-      </div>
-
-      {/* Estadísticas Demo */}
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-blue-50 p-6 rounded-lg">
-          <div className="text-blue-600 text-sm">Empleados Activos</div>
-          <div className="text-2xl font-bold">2,547</div>
-          <div className="text-sm text-blue-600">↑ 12% este mes</div>
+      <Card className="bg-white">
+        <div className="mb-4">
+          <h2 className="text-xl font-bold">⏰ Registro de Jornada</h2>
         </div>
+        <div className="space-y-4">
+          <div className="flex items-center gap-4 mb-6">
+            <span>🔋 Nivel de Energía:</span>
+            <input
+              type="range"
+              min="1"
+              max="10"
+              value={nivelEnergia}
+              onChange={(e) => setNivelEnergia(parseInt(e.target.value))}
+              className="w-48"
+            />
+            <span className="font-bold">{nivelEnergia}/10</span>
+          </div>
 
-        <div className="bg-green-50 p-6 rounded-lg">
-          <div className="text-green-600 text-sm">Satisfacción Media</div>
-          <div className="text-2xl font-bold">85%</div>
-          <div className="text-sm text-green-600">↑ 5% vs mes anterior</div>
+          <div className="flex gap-4">
+            <Button
+              onClick={handleCheckIn}
+              disabled={checkedIn}
+              className={`flex-1 ${
+                !checkedIn ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-300'
+              }`}
+            >
+              ▶️ Check-In
+            </Button>
+            <Button
+              onClick={handleCheckOut}
+              disabled={!checkedIn}
+              className={`flex-1 ${
+                checkedIn ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-300'
+              }`}
+            >
+              ⏹️ Check-Out
+            </Button>
+          </div>
         </div>
+      </Card>
 
-        <div className="bg-yellow-50 p-6 rounded-lg">
-          <div className="text-yellow-600 text-sm">Alertas Activas</div>
-          <div className="text-2xl font-bold">12</div>
-          <div className="text-sm text-yellow-600">↓ 3 desde ayer</div>
+      <Card className="bg-white">
+        <h2 className="text-xl font-bold mb-4">📝 Historial de Registros</h2>
+        <div className="space-y-2">
+          {registros.map((registro, index) => (
+            <div key={index} className="flex justify-between p-2 bg-gray-50 rounded">
+              <span>{registro.tipo === 'entrada' ? '▶️' : '⏹️'} {registro.tipo}</span>
+              <span>🔋 {registro.nivelEnergia}/10</span>
+              <span>⏰ {registro.timestamp}</span>
+            </div>
+          ))}
         </div>
-
-        <div className="bg-purple-50 p-6 rounded-lg">
-          <div className="text-purple-600 text-sm">ROI Promedio</div>
-          <div className="text-2xl font-bold">280%</div>
-          <div className="text-sm text-purple-600">↑ 15% este trimestre</div>
-        </div>
-      </div>
+      </Card>
     </div>
   );
 }
