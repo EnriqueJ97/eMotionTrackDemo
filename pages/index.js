@@ -1,126 +1,74 @@
-import React, { useState, useEffect } from 'react';
-
-const Card = ({ children, className }) => (
-  <div className={`rounded-lg shadow-lg p-4 ${className}`}>{children}</div>
-);
-
-const Button = ({ children, onClick, disabled, className }) => (
-  <button
-    onClick={onClick}
-    disabled={disabled}
-    className={`px-4 py-2 rounded-lg font-medium text-white ${className}`}
-  >
-    {children}
-  </button>
-);
+import React from 'react';
+import Link from 'next/link';
 
 export default function Home() {
-  const [registros, setRegistros] = useState([]);
-  const [checkedIn, setCheckedIn] = useState(false);
-  const [nivelEnergia, setNivelEnergia] = useState(5);
-  const [currentTime, setCurrentTime] = useState('');
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      setCurrentTime(now.toLocaleTimeString());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const handleCheckIn = () => {
-    const newRegistro = {
-      tipo: 'entrada',
-      timestamp: new Date().toLocaleTimeString(),
-      nivelEnergia,
-    };
-    setRegistros([newRegistro, ...registros]);
-    setCheckedIn(true);
-  };
-
-  const handleCheckOut = () => {
-    const newRegistro = {
-      tipo: 'salida',
-      timestamp: new Date().toLocaleTimeString(),
-      nivelEnergia,
-    };
-    setRegistros([newRegistro, ...registros]);
-    setCheckedIn(false);
-  };
+  const features = [
+    {
+      title: 'Registro Horario',
+      description: 'Gestiona tus entradas, salidas y nivel de energía diario',
+      icon: '⏰',
+      href: '/registro-horario',
+      color: 'blue'
+    },
+    {
+      title: 'Portal Empleado',
+      description: 'Accede a tus pulsos emocionales y bienestar laboral',
+      icon: '👤',
+      href: '/empleado',
+      color: 'green'
+    },
+    {
+      title: 'Portal RRHH',
+      description: 'Monitoreo y análisis de indicadores de bienestar',
+      icon: '📊',
+      href: '/rrhh',
+      color: 'purple'
+    },
+    {
+      title: 'Reporting CSRD',
+      description: 'Informes y métricas según normativa ESRS S1',
+      icon: '📑',
+      href: '/csrd-reporting',
+      color: 'indigo'
+    },
+    {
+      title: 'Simulador de Políticas',
+      description: 'Evalúa el impacto de diferentes políticas laborales',
+      icon: '🎯',
+      href: '/politicas',
+      color: 'pink'
+    }
+  ];
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-2">Registro Horario Digital</h1>
-        <p className="text-gray-600">{currentTime}</p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            Bienvenido a eMotionTrack
+          </h1>
+          <p className="text-xl md:text-2xl text-blue-100">
+            Tu plataforma integral para el bienestar laboral y la gestión del capital humano
+          </p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* CSRD Reporting */}
-        <a 
-          href="/csrd-reporting" 
-          className="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow"
-        >
-          <h2 className="text-2xl font-bold text-purple-600 mb-4">Reporting CSRD</h2>
-          <ul className="space-y-2 text-gray-600">
-            <li>✓ Indicadores sociales</li>
-            <li>✓ Cumplimiento normativo</li>
-            <li>✓ Métricas ESG</li>
-            <li>✓ Informes automáticos</li>
-          </ul>
-        </a>
-        <Card className="bg-white">
-          <div className="mb-4">
-            <h2 className="text-xl font-bold">⏰ Registro de Jornada</h2>
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center gap-4 mb-6">
-              <span>🔋 Nivel de Energía:</span>
-              <input
-                type="range"
-                min="1"
-                max="10"
-                value={nivelEnergia}
-                onChange={(e) => setNivelEnergia(parseInt(e.target.value))}
-                className="w-48"
-              />
-              <span className="font-bold">{nivelEnergia}/10</span>
-            </div>
-
-            <div className="flex gap-4">
-              <Button
-                onClick={handleCheckIn}
-                disabled={checkedIn}
-                className={`flex-1 ${
-                  !checkedIn ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-300'
-                }`}
-              >
-                ▶️ Check-In
-              </Button>
-              <Button
-                onClick={handleCheckOut}
-                disabled={!checkedIn}
-                className={`flex-1 ${
-                  checkedIn ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-300'
-                }`}
-              >
-                ⏹️ Check-Out
-              </Button>
-            </div>
-          </div>
-        </Card>
-        <Card className="bg-white">
-          <h2 className="text-xl font-bold mb-4">📝 Historial de Registros</h2>
-          <div className="space-y-2">
-            {registros.map((registro, index) => (
-              <div key={index} className="flex justify-between p-2 bg-gray-50 rounded">
-                <span>{registro.tipo === 'entrada' ? '▶️' : '⏹️'} {registro.tipo}</span>
-                <span>🔋 {registro.nivelEnergia}/10</span>
-                <span>⏰ {registro.timestamp}</span>
-              </div>
-            ))}
-          </div>
-        </Card>
+      {/* Features Grid */}
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature) => (
+            <Link 
+              href={feature.href} 
+              key={feature.title}
+              className={`bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border-t-4 border-${feature.color}-500`}
+            >
+              <div className="text-4xl mb-4">{feature.icon}</div>
+              <h2 className="text-2xl font-bold mb-2">{feature.title}</h2>
+              <p className="text-gray-600">{feature.description}</p>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );
