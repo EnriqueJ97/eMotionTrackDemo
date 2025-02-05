@@ -5,6 +5,13 @@ import Link from 'next/link';
 export default function PortalManagers() {
   const features = [
     {
+      title: 'Panel de Impacto Global',
+      description: 'Vista ejecutiva del impacto organizacional',
+      icon: '📊',
+      href: '/impacto-global',
+      color: 'blue'
+    },
+    {
       title: 'Control Horario',
       description: 'Supervisa los registros horarios del equipo',
       icon: '⏰',
