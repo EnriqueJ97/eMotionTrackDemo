@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 
 const Card = ({ children, className }) => (
@@ -56,59 +55,73 @@ export default function Home() {
         <p className="text-gray-600">{currentTime}</p>
       </div>
 
-      <Card className="bg-white">
-        <div className="mb-4">
-          <h2 className="text-xl font-bold">⏰ Registro de Jornada</h2>
-        </div>
-        <div className="space-y-4">
-          <div className="flex items-center gap-4 mb-6">
-            <span>🔋 Nivel de Energía:</span>
-            <input
-              type="range"
-              min="1"
-              max="10"
-              value={nivelEnergia}
-              onChange={(e) => setNivelEnergia(parseInt(e.target.value))}
-              className="w-48"
-            />
-            <span className="font-bold">{nivelEnergia}/10</span>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* CSRD Reporting */}
+        <a 
+          href="/csrd-reporting" 
+          className="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+        >
+          <h2 className="text-2xl font-bold text-purple-600 mb-4">Reporting CSRD</h2>
+          <ul className="space-y-2 text-gray-600">
+            <li>✓ Indicadores sociales</li>
+            <li>✓ Cumplimiento normativo</li>
+            <li>✓ Métricas ESG</li>
+            <li>✓ Informes automáticos</li>
+          </ul>
+        </a>
+        <Card className="bg-white">
+          <div className="mb-4">
+            <h2 className="text-xl font-bold">⏰ Registro de Jornada</h2>
           </div>
-
-          <div className="flex gap-4">
-            <Button
-              onClick={handleCheckIn}
-              disabled={checkedIn}
-              className={`flex-1 ${
-                !checkedIn ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-300'
-              }`}
-            >
-              ▶️ Check-In
-            </Button>
-            <Button
-              onClick={handleCheckOut}
-              disabled={!checkedIn}
-              className={`flex-1 ${
-                checkedIn ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-300'
-              }`}
-            >
-              ⏹️ Check-Out
-            </Button>
-          </div>
-        </div>
-      </Card>
-
-      <Card className="bg-white">
-        <h2 className="text-xl font-bold mb-4">📝 Historial de Registros</h2>
-        <div className="space-y-2">
-          {registros.map((registro, index) => (
-            <div key={index} className="flex justify-between p-2 bg-gray-50 rounded">
-              <span>{registro.tipo === 'entrada' ? '▶️' : '⏹️'} {registro.tipo}</span>
-              <span>🔋 {registro.nivelEnergia}/10</span>
-              <span>⏰ {registro.timestamp}</span>
+          <div className="space-y-4">
+            <div className="flex items-center gap-4 mb-6">
+              <span>🔋 Nivel de Energía:</span>
+              <input
+                type="range"
+                min="1"
+                max="10"
+                value={nivelEnergia}
+                onChange={(e) => setNivelEnergia(parseInt(e.target.value))}
+                className="w-48"
+              />
+              <span className="font-bold">{nivelEnergia}/10</span>
             </div>
-          ))}
-        </div>
-      </Card>
+
+            <div className="flex gap-4">
+              <Button
+                onClick={handleCheckIn}
+                disabled={checkedIn}
+                className={`flex-1 ${
+                  !checkedIn ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-300'
+                }`}
+              >
+                ▶️ Check-In
+              </Button>
+              <Button
+                onClick={handleCheckOut}
+                disabled={!checkedIn}
+                className={`flex-1 ${
+                  checkedIn ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-300'
+                }`}
+              >
+                ⏹️ Check-Out
+              </Button>
+            </div>
+          </div>
+        </Card>
+        <Card className="bg-white">
+          <h2 className="text-xl font-bold mb-4">📝 Historial de Registros</h2>
+          <div className="space-y-2">
+            {registros.map((registro, index) => (
+              <div key={index} className="flex justify-between p-2 bg-gray-50 rounded">
+                <span>{registro.tipo === 'entrada' ? '▶️' : '⏹️'} {registro.tipo}</span>
+                <span>🔋 {registro.nivelEnergia}/10</span>
+                <span>⏰ {registro.timestamp}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
     </div>
   );
 }
