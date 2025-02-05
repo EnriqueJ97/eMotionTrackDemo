@@ -12,6 +12,13 @@ export default function Home() {
       color: 'blue'
     },
     {
+      title: 'Gestión de Guardias',
+      description: 'Organiza tus preferencias y visualiza tus guardias asignadas',
+      icon: '📅',
+      href: '/guardias-empleado',
+      color: 'indigo'
+    },
+    {
       title: 'Portal Empleado',
       description: 'Accede a tus pulsos emocionales y bienestar laboral',
       icon: '👤',
