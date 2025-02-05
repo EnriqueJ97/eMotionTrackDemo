@@ -24,6 +24,13 @@ export default function PortalWorkers() {
       icon: '📅',
       href: '/guardias-empleado',
       color: 'purple'
+    },
+    {
+      title: 'Flexibilidad Laboral',
+      description: 'Gestiona tus horarios flexibles y equilibrio vida-trabajo',
+      icon: '🎯',
+      href: '/flexibilidad',
+      color: 'indigo'
     }
   ];
 
