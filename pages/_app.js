@@ -8,23 +8,9 @@ function MyApp({ Component, pageProps }) {
       <nav className="bg-white shadow-lg mb-6">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between h-16">
-            <div className="flex space-x-4 items-center">
-              {/* Usa Link en lugar de <a> para navegación interna */}
+            <div className="flex items-center">
               <Link href="/" className="text-xl font-bold text-blue-600">
                 eMotionTrack
-              </Link>
-              <Link href="/" className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">
-                Registro Horario
-              </Link>
-              <Link href="/empleado" className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">
-                Portal Empleado
-              </Link>
-              <Link href="/rrhh" className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">
-                Portal RRHH
-              </Link>
-              {/* Añade los simuladores */}
-              <Link href="/politicas" className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md">
-                Simulador de Políticas
               </Link>
             </div>
           </div>
@@ -35,4 +21,4 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp; // 
+export default MyApp;
