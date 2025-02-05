@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -21,13 +20,31 @@ const PulsosEmpleado = () => {
   const getRecomendaciones = () => {
     const recomendaciones = [];
     if (pulsoActual.estres > 7) {
-      recomendaciones.push("📋 Considera tomar descansos más frecuentes");
+      recomendaciones.push({
+        icon: "📋",
+        titulo: "Alto nivel de estrés detectado",
+        accion: "Toma descansos frecuentes",
+        beneficio: "Reduce 20% el estrés en 2 semanas",
+        recursos: ["Guía de microdescansos", "App de meditación"]
+      });
     }
     if (pulsoActual.motivacion < 5) {
-      recomendaciones.push("💡 Programa una sesión con tu líder para discutir objetivos");
+      recomendaciones.push({
+        icon: "💡",
+        titulo: "Baja motivación identificada",
+        accion: "Programa sesión con tu líder",
+        beneficio: "Clarifica objetivos y aumenta motivación",
+        recursos: ["Guía de desarrollo profesional", "Template de plan de carrera"]
+      });
     }
     if (pulsoActual.energia < 5) {
-      recomendaciones.push("🌿 Revisa tus hábitos de sueño y ejercicio");
+      recomendaciones.push({
+        icon: "🌿",
+        titulo: "Nivel de energía bajo",
+        accion: "Optimiza tus hábitos diarios",
+        beneficio: "Aumenta energía 30% en 3 semanas",
+        recursos: ["Plan de sueño saludable", "Rutina de ejercicios cortos"]
+      });
     }
     return recomendaciones;
   };
@@ -47,7 +64,7 @@ const PulsosEmpleado = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-xl font-bold mb-4">Pulso Diario</h3>
-          
+
           {/* Nivel de Estrés */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2">Nivel de Estrés</label>
@@ -165,7 +182,12 @@ const PulsosEmpleado = () => {
         <div className="space-y-3">
           {getRecomendaciones().map((recomendacion, index) => (
             <div key={index} className="p-3 bg-blue-50 rounded-lg">
-              {recomendacion}
+              {recomendacion.icon} {recomendacion.titulo} - {recomendacion.accion} ({recomendacion.beneficio})
+              <ul>
+                {recomendacion.recursos.map((recurso, i) => (
+                  <li key={i}>{recurso}</li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>

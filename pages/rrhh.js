@@ -10,11 +10,11 @@ const DashboardRRHH = () => {
 
   const datosSimulados = {
     tendencias: [
-      { fecha: 'Lun', estres: 6, cargaTrabajo: 7, motivacion: 6 },
-      { fecha: 'Mar', estres: 5, cargaTrabajo: 6, motivacion: 7 },
-      { fecha: 'Mie', estres: 7, cargaTrabajo: 8, motivacion: 5 },
-      { fecha: 'Jue', estres: 8, cargaTrabajo: 8, motivacion: 4 },
-      { fecha: 'Vie', estres: 7, cargaTrabajo: 7, motivacion: 5 },
+      { fecha: 'Lun', estres: 6, cargaTrabajo: 7, motivacion: 6, productividad: 85 },
+      { fecha: 'Mar', estres: 5, cargaTrabajo: 6, motivacion: 7, productividad: 88 },
+      { fecha: 'Mie', estres: 7, cargaTrabajo: 8, motivacion: 5, productividad: 82 },
+      { fecha: 'Jue', estres: 8, cargaTrabajo: 8, motivacion: 4, productividad: 78 },
+      { fecha: 'Vie', estres: 7, cargaTrabajo: 7, motivacion: 5, productividad: 80 },
     ],
     riesgos: [
       { departamento: 'Desarrollo', riesgo: 75 },
@@ -22,6 +22,11 @@ const DashboardRRHH = () => {
       { departamento: 'Ventas', riesgo: 60 },
       { departamento: 'Recursos Humanos', riesgo: 30 },
     ],
+    predicciones: {
+      rotacion: { actual: 15, predicho: 18, tendencia: 'up' },
+      burnout: { actual: 25, predicho: 22, tendencia: 'down' },
+      engagement: { actual: 72, predicho: 75, tendencia: 'up' }
+    },
   };
 
   return (
@@ -112,10 +117,26 @@ const DashboardRRHH = () => {
                 <Line type="monotone" dataKey="estres" stroke="#ef4444" name="Estrés" />
                 <Line type="monotone" dataKey="cargaTrabajo" stroke="#f59e0b" name="Carga" />
                 <Line type="monotone" dataKey="motivacion" stroke="#10b981" name="Motivación" />
+                <Line type="monotone" dataKey="productividad" stroke="#3b82f6" name="Productividad" />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
+
+        {/* Predicciones */}
+        <div className="bg-white rounded-lg shadow-lg p-6 md:col-span-2">
+          <h3 className="text-lg font-bold mb-4">Predicciones</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {Object.entries(datosSimulados.predicciones).map(([key, value]) => (
+              <div key={key} className={`p-4 bg-${value.tendencia === 'up' ? 'green' : value.tendencia === 'down' ? 'red' : 'yellow'}-50 rounded-lg`}>
+                <div className={`text-${value.tendencia === 'up' ? 'green' : value.tendencia === 'down' ? 'red' : 'yellow'}-700 text-sm`}>{key.charAt(0).toUpperCase() + key.slice(1)}</div>
+                <div className="text-2xl font-bold">Actual: {value.actual}%  Predicción: {value.predicho}%</div>
+                <div className={`text-sm text-${value.tendencia === 'up' ? 'green' : value.tendencia === 'down' ? 'red' : 'yellow'}-600`}>{value.tendencia === 'up' ? '↑' : value.tendencia === 'down' ? '↓' : '→'}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
 
         {/* Alertas y Recomendaciones */}
         <div className="bg-white rounded-lg shadow-lg p-6 md:col-span-2">

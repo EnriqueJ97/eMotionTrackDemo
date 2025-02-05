@@ -35,8 +35,45 @@ export default function RegistroHorario() {
     setCheckedIn(false);
   };
 
+  const analizarPatrones = () => {
+    if (registros.length < 5) return null;
+    
+    const horasPromedio = registros
+      .filter(r => r.tipo === 'entrada')
+      .reduce((acc, curr) => acc + new Date('1970/01/01 ' + curr.timestamp).getHours(), 0) / registros.length;
+      
+    const energiaPromedio = registros.reduce((acc, curr) => acc + curr.nivelEnergia, 0) / registros.length;
+    
+    return {
+      horasPromedio: horasPromedio.toFixed(1),
+      energiaPromedio: energiaPromedio.toFixed(1),
+      tendencia: energiaPromedio > 7 ? 'positiva' : energiaPromedio < 5 ? 'negativa' : 'estable'
+    };
+  };
+
+  const patrones = analizarPatrones();
+
   return (
     <div className="p-6 max-w-4xl mx-auto">
+      {patrones && (
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <h2 className="text-xl font-bold mb-4">📊 Análisis de Patrones</h2>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="p-4 bg-blue-50 rounded-lg">
+              <div className="font-medium">Hora Promedio Entrada</div>
+              <div className="text-2xl font-bold">{patrones.horasPromedio}h</div>
+            </div>
+            <div className="p-4 bg-green-50 rounded-lg">
+              <div className="font-medium">Energía Promedio</div>
+              <div className="text-2xl font-bold">{patrones.energiaPromedio}/10</div>
+            </div>
+            <div className="p-4 bg-purple-50 rounded-lg">
+              <div className="font-medium">Tendencia</div>
+              <div className="text-2xl font-bold">{patrones.tendencia}</div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold mb-2">Registro Horario Digital</h1>
         <p className="text-gray-600">{currentTime}</p>
