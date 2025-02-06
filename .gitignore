@@ -131,3 +131,19 @@ dist
 
 # Replit debugger
 .breakpoints
+# Replit specific
+.replit
+replit.nix
+.config/
+.breakpoints
+.upm/
+
+# GitHub Pages specific
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# Build output
+build/
+public/build/
