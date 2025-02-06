@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { AlertTriangle, TrendingUp, Users, Heart } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { AlertTriangle, TrendingUp, Users, Heart } from 'lucide-react';
 
