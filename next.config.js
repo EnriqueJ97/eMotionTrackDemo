@@ -1,11 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  output: 'export',
   images: {
-    unoptimized: true
+    unoptimized: true,
   },
   basePath: '/eMotionTrackDemo',
-  assetPrefix: '/eMotionTrackDemo'
+  assetPrefix: '/eMotionTrackDemo',
+  experimental: {
+    images: {
+      unoptimized: true,
+    },
+  },
 }
 
 module.exports = nextConfig
