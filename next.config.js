@@ -6,11 +6,7 @@ const nextConfig = {
   },
   basePath: '/eMotionTrackDemo',
   assetPrefix: '/eMotionTrackDemo',
-  experimental: {
-    images: {
-      unoptimized: true,
-    },
-  },
+  trailingSlash: true
 }
 
 module.exports = nextConfig
