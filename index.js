@@ -1,191 +1,163 @@
-// Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyD7ZGee6yqTPIpYJrZDWWeaLwfUcWxPBYw",
-  authDomain: "emotiontrack-4e8c1.firebaseapp.com",
-  projectId: "emotiontrack-4e8c1",
-  storageBucket: "emotiontrack-4e8c1.firebasestorage.app",
-  messagingSenderId: "883417546925",
-  appId: "1:883417546925:web:0f272f022016004d0e4624",
-  measurementId: "G-L0CC0W4TCR"
-};
+// Remover todo el código React y reemplazarlo con:
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// Políticas disponibles
+const policies = [
+    {
+        id: 'flexwork',
+        name: 'Trabajo Flexible',
+        description: 'Implementar horarios flexibles y trabajo remoto',
+        impact: {
+            engagement: 15,
+            burnout: -20,
+            productivity: 10
+        },
+        cost: 1000
+    },
+    {
+        id: 'wellness',
+        name: 'Programa de Bienestar',
+        description: 'Sesiones de mindfulness y apoyo psicológico',
+        impact: {
+            engagement: 20,
+            burnout: -30,
+            productivity: 15
+        },
+        cost: 2000
+    },
+    {
+        id: 'breaks',
+        name: 'Pausas Activas',
+        description: 'Implementar pausas estructuradas durante la jornada',
+        impact: {
+            engagement: 10,
+            burnout: -15,
+            productivity: 5
+        },
+        cost: 500
+    }
+];
 
-// Función para guardar datos
-async function saveEmployeeData(data) {
-  try {
-    await db.collection('employeeData').add({
-      ...data,
-      timestamp: new Date()
+// Variables globales
+let metricsChart = null;
+
+// Funciones
+function generatePolicyCards() {
+    const container = document.getElementById('policies-container');
+    if (!container) return;
+    
+    container.innerHTML = ''; // Limpiar contenedor
+    
+    policies.forEach(policy => {
+        const card = document.createElement('div');
+        card.className = 'col-md-4 mb-4';
+        card.innerHTML = `
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">${policy.name}</h5>
+                    <p class="card-text">${policy.description}</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="${policy.id}" id="${policy.id}">
+                        <label class="form-check-label" for="${policy.id}">
+                            Implementar (Coste: ${policy.cost}€)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
     });
-    console.log('Datos guardados correctamente');
-  } catch (error) {
-    console.error('Error guardando datos:', error);
-  }
 }
 
-// Función para obtener datos
-async function getEmployeeData() {
-  try {
-    const snapshot = await db.collection('employeeData')
-      .orderBy('timestamp', 'desc')
-      .limit(10)
-      .get();
+function calculateImpact() {
+    const selectedPolicies = policies.filter(policy => 
+        document.getElementById(policy.id)?.checked
+    );
     
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-  } catch (error) {
-    console.error('Error obteniendo datos:', error);
-    return [];
-  }
-}import React, { useState, useEffect } from 'react';
+    if (selectedPolicies.length === 0) {
+        alert('Por favor, selecciona al menos una política');
+        return;
+    }
 
-// Componentes básicos
-const Card = ({ children, className }) => (
-  <div className={`rounded-lg shadow-lg p-4 ${className}`}>{children}</div>
-);
-
-const Button = ({ children, onClick, disabled, className }) => (
-  <button
-    onClick={onClick}
-    disabled={disabled}
-    className={`px-4 py-2 rounded-lg font-medium text-white ${className}`}
-  >
-    {children}
-  </button>
-);
-
-const RegistroHorario = () => {
-  const [registros, setRegistros] = useState([]);
-  const [checkedIn, setCheckedIn] = useState(false);
-  const [nivelEnergia, setNivelEnergia] = useState(5);
-  const [currentTime, setCurrentTime] = useState('');
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      setCurrentTime(now.toLocaleTimeString());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const handleCheckIn = () => {
-    const newRegistro = {
-      tipo: 'entrada',
-      timestamp: new Date().toISOString(),
-      nivelEnergia,
+    const impact = {
+        engagement: 0,
+        burnout: 0,
+        productivity: 0,
+        totalCost: 0
     };
-    setRegistros([newRegistro, ...registros]);
-    setCheckedIn(true);
-  };
 
-  const handleCheckOut = () => {
-    const newRegistro = {
-      tipo: 'salida',
-      timestamp: new Date().toISOString(),
-      nivelEnergia,
-    };
-    setRegistros([newRegistro, ...registros]);
-    setCheckedIn(false);
-  };
+    selectedPolicies.forEach(policy => {
+        impact.engagement += policy.impact.engagement;
+        impact.burnout += policy.impact.burnout;
+        impact.productivity += policy.impact.productivity;
+        impact.totalCost += policy.cost;
+    });
 
-  return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-2">Registro Horario Digital</h1>
-        <p className="text-gray-600">{currentTime}</p>
-      </div>
+    // Guardar en Firebase si está disponible
+    if (typeof db !== 'undefined') {
+        db.collection('simulations').add({
+            timestamp: new Date(),
+            selectedPolicies: selectedPolicies.map(p => p.id),
+            impact: impact
+        }).catch(error => console.error('Error saving to Firebase:', error));
+    }
 
-      {/* Tarjeta de Registro */}
-      <Card className="bg-white">
-        <div className="mb-4">
-          <h2 className="text-xl font-bold">⏰ Registro de Jornada</h2>
-        </div>
-        <div className="space-y-4">
-          {/* Control de Nivel de Energía */}
-          <div className="flex items-center gap-4 mb-6">
-            <span>🔋 Nivel de Energía:</span>
-            <input
-              type="range"
-              min="1"
-              max="10"
-              value={nivelEnergia}
-              onChange={(e) => setNivelEnergia(parseInt(e.target.value))}
-              className="w-48"
-            />
-            <span className="font-bold">{nivelEnergia}/10</span>
-          </div>
+    updateResults(impact);
+    updateChart(impact);
+}
 
-          {/* Botones de Check */}
-          <div className="flex gap-4">
-            <Button
-              onClick={handleCheckIn}
-              disabled={checkedIn}
-              className={`flex-1 ${
-                !checkedIn ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-300'
-              }`}
-            >
-              ▶️ Check-In
-            </Button>
-            <Button
-              onClick={handleCheckOut}
-              disabled={!checkedIn}
-              className={`flex-1 ${
-                checkedIn ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-300'
-              }`}
-            >
-              ⏹️ Check-Out
-            </Button>
-          </div>
-        </div>
-      </Card>
+function updateResults(impact) {
+    const resultsDiv = document.getElementById('results');
+    if (!resultsDiv) return;
 
-      {/* Historial de Registros */}
-      <Card className="bg-white">
-        <div className="mb-4">
-          <h2 className="text-xl font-bold">📋 Historial de Registros</h2>
-        </div>
-        <div className="space-y-4">
-          {registros.map((registro, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between p-3 border rounded-lg"
-            >
-              <div className="flex items-center gap-2">
-                <span>📅</span>
-                <span className="font-medium">
-                  {new Date(registro.timestamp).toLocaleString()}
-                </span>
-              </div>
-              <div className="flex items-center gap-4">
-                <span
-                  className={`px-3 py-1 rounded-full text-white ${
-                    registro.tipo === 'entrada' ? 'bg-green-500' : 'bg-red-500'
-                  }`}
-                >
-                  {registro.tipo === 'entrada' ? '▶️ Entrada' : '⏹️ Salida'}
-                </span>
-                <span className="flex items-center gap-1">
-                  🔋 {registro.nivelEnergia}/10
-                </span>
-              </div>
-            </div>
-          ))}
-          {registros.length === 0 && (
-            <p className="text-center text-gray-500">
-              No hay registros disponibles
-            </p>
-          )}
-        </div>
-      </Card>
-    </div>
-  );
-};
+    resultsDiv.classList.remove('d-none');
+    
+    const engagementValue = document.getElementById('engagement-value');
+    if (engagementValue) {
+        engagementValue.textContent = `${impact.engagement}%`;
+    }
+}
 
-export default RegistroHorario;
+function updateChart(impact) {
+    const canvas = document.getElementById('metricsChart');
+    if (!canvas) return;
 
+    const ctx = canvas.getContext('2d');
+    
+    if (metricsChart) {
+        metricsChart.destroy();
+    }
+
+    metricsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Engagement', 'Reducción Burnout', 'Productividad'],
+            datasets: [{
+                label: 'Impacto (%)',
+                data: [impact.engagement, -impact.burnout, impact.productivity],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+// Inicializar cuando el documento esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    generatePolicyCards();
+});
