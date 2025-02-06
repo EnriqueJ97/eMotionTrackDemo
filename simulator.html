@@ -33,3 +33,123 @@
                         <h5>Programa de Bienestar</h5>
                         <p>Sesiones de mindfulness y apoyo psicológico</p>
                         <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="policy2">
+                            <label class="form-check-label">
+                                Implementar (2000€)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Política 3 -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Pausas Activas</h5>
+                        <p>Pausas estructuradas durante la jornada</p>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="policy3">
+                            <label class="form-check-label">
+                                Implementar (500€)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón de Simulación -->
+        <button class="btn btn-primary mt-4" onclick="simular()">Simular Impacto</button>
+
+        <!-- Resultados -->
+        <div id="resultados" class="mt-4" style="display:none;">
+            <h3>Resultados de la Simulación</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <canvas id="grafico"></canvas>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Impacto Total</h5>
+                            <p id="impacto"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let grafico = null;
+
+        function simular() {
+            // Recoger políticas seleccionadas
+            const policy1 = document.getElementById('policy1').checked;
+            const policy2 = document.getElementById('policy2').checked;
+            const policy3 = document.getElementById('policy3').checked;
+
+            // Calcular impacto
+            let engagement = 0;
+            let coste = 0;
+
+            if (policy1) {
+                engagement += 15;
+                coste += 1000;
+            }
+            if (policy2) {
+                engagement += 20;
+                coste += 2000;
+            }
+            if (policy3) {
+                engagement += 10;
+                coste += 500;
+            }
+
+            // Mostrar resultados
+            document.getElementById('resultados').style.display = 'block';
+            document.getElementById('impacto').innerHTML = `
+                Mejora en Engagement: ${engagement}%<br>
+                Coste Total: ${coste}€
+            `;
+
+            // Actualizar gráfico
+            const ctx = document.getElementById('grafico').getContext('2d');
+            
+            if (grafico) {
+                grafico.destroy();
+            }
+
+            grafico = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Engagement', 'Coste (€)'],
+                    datasets: [{
+                        label: 'Impacto',
+                        data: [engagement, coste],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(255, 99, 132, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
