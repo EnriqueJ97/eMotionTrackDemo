@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone", // Necesario para Replit
-  // experimental: {    // ¡Elimínalo si no usas serverActions!
-  //   serverActions: true
-  // }
-};
+  reactStrictMode: true,
+  images: {
+    unoptimized: true
+  },
+  basePath: '/eMotionTrackDemo',
+  assetPrefix: '/eMotionTrackDemo'
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
