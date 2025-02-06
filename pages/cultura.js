@@ -1,6 +1,11 @@
-import { AlertTriangle, TrendingUp, Users, Heart } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { AlertTriangle, TrendingUp, Users, Heart } from 'lucide-react';
+
+const CulturaOrganizacional = () => {
+  // Resto de tu código permanece igual
+}
+
+export default CulturaOrganizacional;
 
 const CulturaOrganizacional = () => {
   // Datos de ejemplo para el mapa de valores
