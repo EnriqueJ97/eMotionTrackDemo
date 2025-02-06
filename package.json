@@ -1,11 +1,13 @@
-{"homepage": "https://EnriqueJ97.github.io/eMotionTrackDemo",
+{
+  "homepage": "https://EnriqueJ97.github.io/eMotionTrackDemo",
   "name": "emotion-track",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build": "next build && next export",
+    "start": "next start",
+    "export": "next export"
   },
   "dependencies": {
     "autoprefixer": "^10.4.14",
