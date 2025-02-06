@@ -1,4 +1,48 @@
-import React, { useState, useEffect } from 'react';
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyD7ZGee6yqTPIpYJrZDWWeaLwfUcWxPBYw",
+  authDomain: "emotiontrack-4e8c1.firebaseapp.com",
+  projectId: "emotiontrack-4e8c1",
+  storageBucket: "emotiontrack-4e8c1.firebasestorage.app",
+  messagingSenderId: "883417546925",
+  appId: "1:883417546925:web:0f272f022016004d0e4624",
+  measurementId: "G-L0CC0W4TCR"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// Función para guardar datos
+async function saveEmployeeData(data) {
+  try {
+    await db.collection('employeeData').add({
+      ...data,
+      timestamp: new Date()
+    });
+    console.log('Datos guardados correctamente');
+  } catch (error) {
+    console.error('Error guardando datos:', error);
+  }
+}
+
+// Función para obtener datos
+async function getEmployeeData() {
+  try {
+    const snapshot = await db.collection('employeeData')
+      .orderBy('timestamp', 'desc')
+      .limit(10)
+      .get();
+    
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error('Error obteniendo datos:', error);
+    return [];
+  }
+}import React, { useState, useEffect } from 'react';
 
 // Componentes básicos
 const Card = ({ children, className }) => (
